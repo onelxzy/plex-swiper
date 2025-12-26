@@ -52,7 +52,7 @@
     // ==========================================
     // 2. Core Application Logic
     // ==========================================
-    
+
     const initPlexSwiper = () => {
         const CONFIG = {
             serverUrl: null,
@@ -73,52 +73,89 @@
         // --- Styles Injection ---
         safeAddStyle(`
             .plex-home-swiper-wrapper {
-                width: 100%; height: 0; padding-bottom: 56.25%; max-height: 85vh;
-                position: relative; margin-bottom: 24px; z-index: 1;
-                background: #0d0d0d; display: block !important;
-                border-radius: 8px; overflow: hidden;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                width: calc(100% - 48px);
+                max-width: 1600px;
+                margin-left: auto;
+                margin-right: auto;
+                margin-bottom: 32px;
+                padding-bottom: 46%;
+                height: 0;
+                max-height: 75vh;
+                border-radius: 8px;
+                position: relative;
+                z-index: 1;
+                background: #0d0d0d;
+                display: block !important;
+                overflow: hidden;
+                box-shadow: 0 15px 40px rgba(0,0,0,0.6);
                 transform: translateZ(0); will-change: transform;
             }
-            @media (min-aspect-ratio: 16/9) {
-                .plex-home-swiper-wrapper { height: 80vh; padding-bottom: 0; }
+
+            .plex-home-swiper-wrapper.is-home {
+                margin-top: 2px;
             }
+
+            .plex-home-swiper-wrapper.is-library {
+                margin-top: -15px;
+            }
+
+            @media (min-width: 1921px) {
+                .plex-home-swiper-wrapper {
+                     width: calc(100% - 80px);
+                     padding-bottom: 38%;
+                }
+            }
+
+            @media (max-width: 1000px) {
+                .plex-home-swiper-wrapper {
+                    width: calc(100% - 24px);
+                    margin-top: 10px !important;
+                    margin-bottom: 16px;
+                }
+            }
+
             .swiper { width: 100%; height: 100%; position: absolute; top: 0; left: 0; }
             .swiper-slide { background-position: center top; background-size: cover; position: relative; }
-            
-            /* Interaction Fixes */
+
             .main-swiper .swiper-slide:not(.swiper-slide-active) { pointer-events: none !important; z-index: 0; }
             .main-swiper .swiper-slide-active { pointer-events: auto !important; z-index: 10; }
             .main-swiper .swiper-slide:not(.swiper-slide-active) .info-layer a { pointer-events: none !important; }
 
             .banner-mask {
                 position: absolute; inset: 0;
-                background: linear-gradient(to right, #000 0%, rgba(0,0,0,0.4) 50%, transparent 100%),
-                            linear-gradient(to top, #000 0%, transparent 30%);
+                background: linear-gradient(to right, #000 0%, rgba(0,0,0,0.5) 40%, transparent 100%),
+                            linear-gradient(to top, #000 0%, rgba(0,0,0,0.2) 40%, transparent 100%);
                 z-index: 1;
                 pointer-events: none;
             }
             .info-layer {
-                position: absolute; bottom: 8%; left: 4%; width: 45%; z-index: 20;
+                position: absolute; bottom: 10%; left: 4%; width: 45%; z-index: 20;
                 color: #eeeff0; text-shadow: 0 2px 4px rgba(0,0,0,0.9); pointer-events: none;
             }
             .info-layer a { pointer-events: auto; }
             .title-link { text-decoration: none; color: inherit; display: inline-block; transition: transform 0.2s ease; cursor: pointer; }
             .title-link:hover { transform: scale(1.02); opacity: 0.9; }
-            .info-logo { max-width: 300px; max-height: 120px; width: auto; height: auto; display: block; margin-bottom: 15px; object-fit: contain; object-position: left bottom; }
+
+            .info-logo { max-width: 280px; max-height: 110px; width: auto; height: auto; display: block; margin-bottom: 15px; object-fit: contain; object-position: left bottom; }
             .info-title-text { font-size: clamp(1.5rem, 2.5vw, 3rem); font-weight: 700; line-height: 1.1; margin-bottom: 8px; font-family: "Open Sans", sans-serif; display: none; }
             .info-meta { font-size: 1rem; color: #e5a00d; font-weight: 600; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
-            .info-desc { font-size: 0.95rem; line-height: 1.5; opacity: 0.8; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; max-width: 600px; }
-            .thumb-layer { position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%); width: auto; z-index: 20; padding: 5px; background: transparent; }
-            .thumb-layer .swiper-wrapper { justify-content: center !important; width: auto !important; }
+            .info-desc { font-size: 0.95rem; line-height: 1.6; opacity: 0.85; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; max-width: 600px; }
+
+            .thumb-layer {
+                position: absolute; bottom: 20px;
+                right: 20px; left: auto; transform: none;
+                width: auto; z-index: 20; padding: 5px; background: transparent;
+            }
+            .thumb-layer .swiper-wrapper { justify-content: flex-end !important; width: auto !important; }
+
             .thumb-layer .swiper-slide {
-                width: 48px !important; height: 72px !important; border-radius: 4px; overflow: hidden;
-                opacity: 0.4; border: 2px solid transparent; background: #1a1a1a;
+                width: 40px !important; height: 60px !important; border-radius: 4px; overflow: hidden;
+                opacity: 0.5; border: 2px solid transparent; background: #1a1a1a;
                 cursor: pointer; transition: all 0.2s ease; margin: 0 4px !important; flex-shrink: 0;
                 box-shadow: 0 2px 5px rgba(0,0,0,0.8); pointer-events: auto !important;
             }
-            .thumb-layer .swiper-slide:hover { opacity: 0.8; transform: translateY(-3px); }
-            .thumb-layer .swiper-slide-thumb-active { opacity: 1; border-color: #e5a00d; transform: scale(1.15); box-shadow: 0 4px 12px rgba(0,0,0,0.9); z-index: 2; }
+            .thumb-layer .swiper-slide:hover { opacity: 0.9; transform: translateY(-2px); }
+            .thumb-layer .swiper-slide-thumb-active { opacity: 1; border-color: #e5a00d; transform: scale(1.1); box-shadow: 0 4px 12px rgba(0,0,0,0.9); z-index: 2; }
             .thumb-layer img { width: 100%; height: 100%; object-fit: cover; }
         `);
 
@@ -284,7 +321,7 @@
         async function getDataForContext(contextType, sectionId = null, contextKey) {
             if (!State.isConfigReady) tryRecoverConfig();
             if (!State.isConfigReady) return [];
-            
+
             if (!CONFIG.machineIdentifier) await initMachineId();
 
             const cached = DataCache.get(contextKey);
@@ -329,9 +366,9 @@
             if (oldWrapper) oldWrapper.remove();
 
             const serverId = CONFIG.machineIdentifier;
-            
+
             const wrapper = document.createElement('div');
-            wrapper.className = 'plex-home-swiper-wrapper';
+            wrapper.className = `plex-home-swiper-wrapper ${contextKey === 'home' ? 'is-home' : 'is-library'}`;
             wrapper.innerHTML = `
                 <div class="swiper main-swiper"><div class="swiper-wrapper">
                 ${items.map((item, index) => {
@@ -395,7 +432,7 @@
             State.currentContainer = container;
             container.dataset.observerContext = context.key;
             checkAndRender(container, context);
-            
+
             const observer = new MutationObserver(() => checkAndRender(container, context));
             observer.observe(container, { childList: true });
             State.activeObserver = observer;
