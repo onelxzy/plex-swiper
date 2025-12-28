@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Plex Swiper
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.1
 // @description  A polished, auto-discovering, mixed-library sorting swiper for Plex Home & Libraries
 // @author       onelxzy
 // @match        https://app.plex.tv/*
@@ -10,6 +10,8 @@
 // @grant        GM_addStyle
 // @run-at       document-start
 // @license      GPL-3.0-only
+// @downloadURL  https://update.greasyfork.org/scripts/560306/Plex-Swiper.user.js
+// @updateURL    https://update.greasyfork.org/scripts/560306/Plex-Swiper.meta.js
 // ==/UserScript==
 
 (function() {
@@ -246,14 +248,16 @@
             } else {
                 width = 300; height = 450;
             }
-            const assetUrl = `${CONFIG.serverUrl}${path}?X-Plex-Token=${CONFIG.token}`;
+            const internalBase = 'http://127.0.0.1:32400';
+            const assetUrl = `${internalBase}${path}?X-Plex-Token=${CONFIG.token}`;
             return `${CONFIG.serverUrl}/photo/:/transcode?url=${encodeURIComponent(assetUrl)}&width=${width}&height=${height}&minSize=1&X-Plex-Token=${CONFIG.token}`;
         }
 
         function getLogoUrl(item) {
             if (!CONFIG.serverUrl) return '';
             const id = item._targetId || item.ratingKey;
-            const assetUrl = `${CONFIG.serverUrl}/library/metadata/${id}/clearLogo?X-Plex-Token=${CONFIG.token}`;
+            const internalBase = 'http://127.0.0.1:32400';
+            const assetUrl = `${internalBase}/library/metadata/${id}/clearLogo?X-Plex-Token=${CONFIG.token}`;
             return `${CONFIG.serverUrl}/photo/:/transcode?url=${encodeURIComponent(assetUrl)}&width=300&height=120&minSize=1&format=png&X-Plex-Token=${CONFIG.token}`;
         }
 
