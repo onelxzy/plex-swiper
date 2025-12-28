@@ -15,7 +15,7 @@
 
 ### 安装步骤
 1.  在浏览器中安装扩展程序 **Tampermonkey**。
-2.  点击 [安装此脚本](#) 。
+2.  点击 [安装此脚本](https://greasyfork.org/zh-CN/scripts/560306-plex-swiper) 。
 3.  刷新 Plex 网页即可生效。
 
 ---
